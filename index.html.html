@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Townhouse Cafe — Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --maroon:#6B2737;
+    --maroon-deep:#4A1B27;
+    --cream:#FBF4E8;
+    --amber:#D98E3E;
+    --coffee:#2E1E1A;
+    --line: rgba(217,142,62,0.30);
+    --muted:#7A6F63;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--coffee);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .display{font-family:'Fraunces',serif;}
+
+  /* ---------- LANDING / QR SCREEN ---------- */
+  .landing{
+    min-height:100vh;
+    background:radial-gradient(ellipse at top, var(--maroon) 0%, var(--maroon-deep) 70%);
+    color:var(--cream);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:48px 24px;
+    position:relative;
+    overflow:hidden;
+  }
+  .lights{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:0.55;
+  }
+  .lights span{
+    position:absolute;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 10px 3px rgba(217,142,62,0.7);
+    animation:twinkle 3.2s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:0.25; transform:scale(0.8); }
+    50%{ opacity:1; transform:scale(1.15); }
+  }
+  .landing .eyebrow{
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    font-size:11px;
+    color:var(--amber);
+    margin-bottom:16px;
+    z-index:1;
+  }
+  .landing .home-badge{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    border:1.5px solid var(--amber);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+    z-index:1;
+  }
+  .landing .home-badge svg{ width:28px; height:28px; }
+  .landing h1{
+    font-size:clamp(38px,8vw,62px);
+    font-weight:600;
+    line-height:1.05;
+    margin-bottom:8px;
+    z-index:1;
+  }
+  .landing .tagline{
+    font-size:16px;
+    font-style:italic;
+    color:#E8C9A0;
+    font-family:'Fraunces',serif;
+    margin-bottom:40px;
+    z-index:1;
+  }
+  .qr-card{
+    background:var(--cream);
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.55);
+    position:relative;
+    z-index:1;
+  }
+  #qrcode{
+    width:188px;
+    height:188px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  #qrcode img{ display:block; border-radius:4px; }
+  .qr-caption{
+    margin-top:22px;
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    color:rgba(251,244,232,0.65);
+    text-transform:uppercase;
+    z-index:1;
+  }
+  .enter-link{
+    margin-top:28px;
+    font-size:14px;
+    color:var(--amber);
+    text-decoration:none;
+    border-bottom:1px solid rgba(217,142,62,0.4);
+    padding-bottom:4px;
+    z-index:1;
+    transition:opacity 0.2s;
+  }
+  .enter-link:hover{ opacity:0.75; }
+
+  /* ---------- MENU PAGE ---------- */
+  .menu-page{ display:none; }
+  .menu-page.active{ display:block; }
+  .landing.hidden{ display:none; }
+
+  header.top{
+    position:sticky;
+    top:0;
+    background:rgba(251,244,232,0.94);
+    backdrop-filter:blur(8px);
+    z-index:10;
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{
+    max-width:720px;
+    margin:0 auto;
+    padding:20px 24px 4px;
+    text-align:center;
+  }
+  .top-inner .brand{
+    font-size:26px;
+    font-weight:600;
+    color:var(--maroon);
+  }
+  .top-inner .brand-tag{
+    font-size:12px;
+    font-style:italic;
+    font-family:'Fraunces',serif;
+    color:var(--muted);
+    margin-top:2px;
+  }
+  .top-inner .hours{
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-top:8px;
+  }
+
+  nav.cats{
+    display:flex;
+    gap:20px;
+    overflow-x:auto;
+    padding:14px 24px 0;
+    max-width:720px;
+    margin:0 auto;
+    scrollbar-width:none;
+  }
+  nav.cats::-webkit-scrollbar{ display:none; }
+  nav.cats a{
+    flex:0 0 auto;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:0.02em;
+    color:var(--coffee);
+    text-decoration:none;
+    opacity:0.5;
+    padding-bottom:14px;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:opacity 0.2s, border-color 0.2s;
+  }
+  nav.cats a.active, nav.cats a:hover{
+    opacity:1;
+    color:var(--maroon);
+    border-color:var(--amber);
+  }
+
+  main{
+    max-width:720px;
+    margin:0 auto;
+    padding:36px 24px 80px;
+  }
+
+  .section-title{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin:52px 0 22px;
+  }
+  .section-title:first-child{ margin-top:0; }
+  .section-title h2{
+    font-size:28px;
+    font-weight:600;
+    color:var(--maroon);
+    white-space:nowrap;
+  }
+  .section-title .note{
+    font-size:12px;
+    color:var(--muted);
+    font-style:italic;
+    font-family:'Fraunces',serif;
+    white-space:nowrap;
+  }
+  .section-title .rule{
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  .dish{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:20px;
+    padding:13px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .dish:last-child{ border-bottom:none; }
+  .dish-name{
+    font-size:16.5px;
+    font-weight:500;
+  }
+  .dish-name .var{
+    font-size:12.5px;
+    color:var(--muted);
+    font-weight:400;
+  }
+  .dish-price{
+    font-size:16px;
+    font-weight:600;
+    color:var(--maroon);
+    white-space:nowrap;
+  }
+  .dish-price .var-price{
+    display:block;
+    font-size:12.5px;
+    font-weight:400;
+    color:var(--muted);
+    text-align:right;
+  }
+
+  .footnote{
+    font-size:12px;
+    color:var(--muted);
+    font-style:italic;
+    font-family:'Fraunces',serif;
+    margin:-8px 0 18px;
+  }
+
+  footer.menu-footer{
+    text-align:center;
+    padding:48px 24px 60px;
+    background:var(--maroon-deep);
+    color:var(--cream);
+    margin-top:30px;
+  }
+  footer.menu-footer .display{
+    font-size:24px;
+    margin-bottom:14px;
+  }
+  footer.menu-footer .contact{
+    font-size:14px;
+    color:#E8C9A0;
+    margin:6px 0;
+  }
+  footer.menu-footer a{
+    color:#E8C9A0;
+    text-decoration:none;
+  }
+
+  @media (max-width:480px){
+    .landing h1{ font-size:38px; }
+    .dish-name{ font-size:15.5px; }
+    .section-title h2{ font-size:23px; }
+  }
+
+  :focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- LANDING: QR SCAN SCREEN -->
+  <section class="landing" id="landing">
+    <div class="lights" id="lights"></div>
+    <div class="eyebrow">Scan to view</div>
+    <div class="home-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#D98E3E" stroke-width="1.5">
+        <path d="M3 11.5L12 4l9 7.5"/>
+        <path d="M5 10v9.5a1 1 0 001 1h12a1 1 0 001-1V10"/>
+        <path d="M9.5 20.5V14h5v6.5"/>
+      </svg>
+    </div>
+    <h1 class="display">The Townhouse Cafe</h1>
+    <p class="tagline">here, every bite feels like home</p>
+
+    <div class="qr-card">
+      <div id="qrcode"></div>
+    </div>
+    <div class="qr-caption">Point your camera at the code</div>
+    <a href="#" class="enter-link" id="enterLink">or view the menu here →</a>
+  </section>
+
+  <!-- MENU PAGE -->
+  <div class="menu-page" id="menuPage">
+    <header class="top">
+      <div class="top-inner">
+        <div class="brand display">The Townhouse Cafe</div>
+        <div class="brand-tag">here, every bite feels like home</div>
+        <div class="hours">Mon – Sat · 12pm – 10pm</div>
+      </div>
+      <nav class="cats" id="catNav">
+        <a href="#starter">Starter</a>
+        <a href="#momos">Momos</a>
+        <a href="#pizza">Pizza</a>
+        <a href="#burger">Burger &amp; Fries</a>
+        <a href="#rice">Rice</a>
+        <a href="#maggie">Maggie</a>
+        <a href="#chinese">Chinese</a>
+        <a href="#sizzling">Sizzling</a>
+        <a href="#beverages">Beverages</a>
+        <a href="#shakes">Thick Shake</a>
+      </nav>
+    </header>
+
+    <main>
+
+      <section id="starter">
+        <div class="section-title"><h2 class="display">Starter</h2><div class="rule"></div></div>
+        <div class="dish"><span class="dish-name">Veg Spring Roll</span><span class="dish-price">₹119</span></div>
+        <div class="dish"><span class="dish-name">Cheesy Nachos</span><span class="dish-price">₹149</span></div>
+        <div class="dish"><span class="dish-name">Paneer Pakoda</span><span class="dish-price">₹169</span></div>
+        <div class="dish"><span class="dish-name">Peanut Masala</span><span class="dish-price">₹99</span></div>
+      </section>
+
+      <section id="momos">
+        <div class="section-title"><h2 class="display">Momos</h2><span class="note">10 pc</span><div class="rule"></div></div>
+        <div class="dish"><span class="dish-name">Steam Momos</span><span class="dish-price">₹99</span></div>
+        <div class="dish"><span class="dish-name">Fried Momos</span><span class="dish-price">₹119</span></div>
+        <div class="dish"><span class="dish-name">Kurkure Momos</span><span class="dish-price">₹119</span></div>
+        <div class="dish"><span class="dish-name">Paneer Momos</span><span class="dish-price">₹129</span></div>
+      </section>
+
+      <section id="pizza">
+        <div class="section-title"><h2 class="display">Pizza</h2><span class="note">medium</span><div class="rule"></div></div>
+        <div class="dish"><span class="dish-name">Margherita</span><span class="dish-price">₹169</span></div>
+        <div class="dish"><span class="dish-name">Onion &amp; Tomato</span><span class="dish-price">₹199</span></div>
+        <div class="dish"><span class="dish-name">Onion &amp; Paneer</span><span class="dish-price">₹249</span></div>
+        <div class="dish"><span class="dish-name">Cheese &amp; Corn</span><span class="dish-price">₹219</span></div>
+        <div class="dish"><span class="dish-name">Mushroom &amp; Corn</span><span class="dish-price">₹219</span></div>
+        <div class="dish"><span class="dish-name">Paneer &amp; Tikka</span><span class="dish-price">₹219</span></div>
+        <div class="dish"><span class="dish-name">Paneer &amp; Capsicum</span><span class="dish-price">₹299</span></div>
+        <div class="dish"><span class="dish-name">Veggies Loaded</span><span class="dish-price">₹299</span></div>
+        <div class="dish"><span class="dish-name">Extra Cheese</span><span class="dish-price">₹29</span></div>
+      </section>
+
+      <section id="burger">
+        <div class="section-title"><h2 class="display">Burger &amp; Fries</h2><div class="rule"></div></div>
+        <div class="dish"><span class="dish-name">Veg Burger</span><span class="dish-price">₹99</span></div>
+        <div class="dish"><span class="dish-name">Cheese Burger</span><span class="dish-price">₹119</span></div>
+        <div class="dish"><span class="dish-name">Paneer Burger</span><span class="dish-price">₹129</span></div>
+        <div class="dish"><span class="dish-name">Salty Fries</span><span class="dish-price">₹99</span></div>
+        <div class="dish"><span class="dish-name">Peri Peri Fries</span><span class="dish-price">₹119</span></div>
+        <div class="dish"><span class="dish-name">Cheesy Poppers</span><span class="dish-price">₹149</span></div>
+        <div class="dish"><span class="dish-name">Cheesy Potato</span><span class="dish-price">₹149</span></div>
+        <div class="dish"><span class="dish-name">Veges</span><span class="dish-price">₹29</span></div>
+      </section>
+
+      <section id="rice">
+        <div class="section-title"><h2 class="display">Rice</h2><div class="rule"></div></div>
+        <p class="footnote">Regular / Large</p>
+        <div class="dish">
+          <span class="dish-name">Vegetable Fried Rice</span>
+          <span class="dish-price">₹149</span>
+        </div>
+        <div class="dish">
+          <span class="dish-name">Paneer Fried Rice <span class="var">— Regular / Large</span></span>
+          <span class="dish-price">₹159 <span class="var-price">₹199</span></span>
+        </div>
+        <div class="dish">
+          <span class="dish-name">Schezwan Fried Rice</span>
+          <span class="dish-price">₹179</span>
+        </div>
+      </section>
+
+      <section id="maggie">
+        <div class="section-title"><h2 class="display">Maggie</h2><div class="rule"></div></div>
+        <div class="dish"><span class="dish-name">Plain Maggie</span><span class="dish-price">₹59</span></div>
+        <div class="dish"><span class="dish-name">Vegetable Maggie</span><span class="dish-price">₹99</span></div>
+        <div class="dish"><span class="dish-name">Paneer Maggie</span><span class="dish-price">₹119</span></div>
+      </section>
+
+      <section id="chinese">
+        <div class="section-title"><h2 class="display">Chinese</h2><div class="rule"></div></div>
+        <div class="dish"><span class="dish-name">Crispy Babycorn</span><span class="dish-price">₹199</span></div>
+        <div class="dish"><span class="dish-name">Chilly Babycorn</span><span class="dish-price">₹219</span></div>
+        <div class="dish"><span class="dish-name">Vegetable Manchurian <span class="var">(Dry / Gravy)</span></span><span class="dish-price">₹199</span></div>
+        <div class="dish"><span class="dish-name">Paneer Manchurian <span class="var">(Dry / Gravy)</span></span><span class="dish-price">₹249</span></div>
+        <div class="dish"><span class="dish-name">Paneer Chilly <span class="var">(Dry / Gravy)</span></span><span class="dish-price">₹219</span></div>
+        <div class="dish"><span class="dish-name">Pepper Paneer <span class="var">(Dry)</span></span><span class="dish-price">₹219</span></div>
+        <div class="dish"><span class="dish-name">Paneer 65 <span class="var">(Dry)</span></span><span class="dish-price">₹249</span></div>
+        <div class="dish"><span class="dish-name">Veg Noodles</span><span class="dish-price">₹149</span></div>
+        <div class="dish"><span class="dish-name">Schezwan Noodles</span><span class="dish-price">₹179</span></div>
+        <div class="dish"><span class="dish-name">Hakka Noodles</span><span class="dish-price">₹199</span></div>
+        <div class="dish"><span class="dish-name">Chilly Garlic Noodles</span><span class="dish-price">₹209</span></div>
+        <div class="dish"><span class="dish-name">Paneer Noodles</span><span class="dish-price">₹219</span></div>
+        <div class="dish"><span class="dish-name">Crispy Corn</span><span class="dish-price">₹249</span></div>
+        <div class="dish"><span class="dish-name">Salty Corn</span><span class="dish-price">₹179</span></div>
+      </section>
+
+      <section id="sizzling">
+        <div class="section-title"><h2 class="display">Sizzling Items</h2><div class="rule"></div></div>
+        <div class="dish"><span class="dish-name">Noodles / Fried Rice with Manchurian</span><span class="dish-price">₹299</span></div>
+        <div class="dish"><span class="dish-name">Noodles / Fried Rice with Paneer Chilly</span><span class="dish-price">₹299</span></div>
+      </section>
+
+      <section id="beverages">
+        <div class="section-title"><h2 class="display">Beverages</h2><div class="rule"></div></div>
+        <div class="dish"><span class="dish-name">Chai</span><span class="dish-price">₹39</span></div>
+        <div class="dish"><span class="dish-name">Hot Coffee</span><span class="dish-price">₹49</span></div>
+        <div class="dish"><span class="dish-name">Ice Tea <span class="var">(Litchi / Peach)</span></span><span class="dish-price">₹69</span></div>
+        <div class="dish"><span class="dish-name">Cold Coffee</span><span class="dish-price">₹99</span></div>
+        <div class="dish"><span class="dish-name">Cold Coffee with Ice Cream</span><span class="dish-price">₹149</span></div>
+        <div class="dish"><span class="dish-name">Soft Drink <span class="var">(Coke / Sprite / Fanta)</span></span><span class="dish-price">₹49</span></div>
+      </section>
+
+      <section id="shakes">
+        <div class="section-title"><h2 class="display">Thick Shake</h2><div class="rule"></div></div>
+        <p class="footnote">Regular / Large</p>
+        <div class="dish">
+          <span class="dish-name">Green Apple <span class="var">— Regular / Large</span></span>
+          <span class="dish-price">₹119 <span class="var-price">₹199</span></span>
+        </div>
+        <div class="dish">
+          <span class="dish-name">Mango <span class="var">— Regular / Large</span></span>
+          <span class="dish-price">₹119 <span class="var-price">₹129</span></span>
+        </div>
+        <div class="dish">
+          <span class="dish-name">Strawberry <span class="var">— Regular / Large</span></span>
+          <span class="dish-price">₹149 <span class="var-price">₹199</span></span>
+        </div>
+        <div class="dish"><span class="dish-name">Black Current</span><span class="dish-price">₹149</span></div>
+        <div class="dish"><span class="dish-name">Butter Scotch</span><span class="dish-price">₹149</span></div>
+      </section>
+
+    </main>
+
+    <footer class="menu-footer">
+      <div class="display">The Townhouse Cafe</div>
+      <p class="contact">@thetownhousevns</p>
+      <p class="contact"><a href="tel:+915424531022">+91 542-4531022</a></p>
+    </footer>
+  </div>
+
+<script>
+  const MENU_URL = window.location.href.split('#')[0] || "https://your-cafe-menu-link.com";
+
+  new QRCode(document.getElementById("qrcode"), {
+    text: MENU_URL,
+    width: 188,
+    height: 188,
+    colorDark: "#4A1B27",
+    colorLight: "#FBF4E8",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  // ambient twinkle lights
+  const lightsContainer = document.getElementById('lights');
+  for(let i=0;i<24;i++){
+    const dot = document.createElement('span');
+    dot.style.left = Math.random()*100+'%';
+    dot.style.top = Math.random()*100+'%';
+    dot.style.animationDelay = (Math.random()*3)+'s';
+    lightsContainer.appendChild(dot);
+  }
+
+  const landing = document.getElementById('landing');
+  const menuPage = document.getElementById('menuPage');
+  const enterLink = document.getElementById('enterLink');
+  const catLinks = document.querySelectorAll('nav.cats a');
+
+  function showMenu(){
+    landing.classList.add('hidden');
+    menuPage.classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  enterLink.addEventListener('click', function(e){
+    e.preventDefault();
+    showMenu();
+  });
+
+  if(window.location.hash === '#menu'){
+    showMenu();
+  }
+
+  const sections = document.querySelectorAll('main section');
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        catLinks.forEach(l=>l.classList.remove('active'));
+        const link = document.querySelector('nav.cats a[href="#'+entry.target.id+'"]');
+        if(link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s=>observer.observe(s));
+</script>
+
+</body>
+</html>
